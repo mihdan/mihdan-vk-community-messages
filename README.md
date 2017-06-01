@@ -1,3 +1,3 @@
-#Mihdan: VK Community Messages
+# Mihdan: VK Community Messages
 
 Плагин добавляет на ваш сайт виджет «Сообщения сообщества» из соцсети ВКонтакте на ваш WordPress сайт.
