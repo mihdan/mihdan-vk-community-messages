@@ -2,6 +2,11 @@
 /**
  * Plugin Name: Mihdan: VK Community Messages
  * Description: Плагин добавляет на ваш сайт виджет «Сообщения сообщества» из соцсети ВКонтакте на ваш WordPress сайт.
+ * GitHub Plugin URI: https://github.com/mihdan/mihdan-vk-community-messages
+ * Author: Mikhail Kobzarev
+ * Author URI: https://www.kobzarev.com/
+ * Plugin URI: https://www.kobzarev.com/projects/mihdan-vk-community-messages/
+ * Version: 1.0
  *
  * @package mihdan-vk-community-messages
  * @version 1.0
@@ -28,14 +33,14 @@ if ( ! class_exists( 'Mihdan_Vk_Community_Messages' ) ) {
 		 *
 		 * @var string
 		 */
-		public static $dir_path;
+		private $dir_path;
 
 		/**
 		 * URL до плагина
 		 *
 		 * @var string
 		 */
-		public static $dir_uri;
+		private $dir_uri;
 
 		/**
 		 * Хранит экземпляр класса
@@ -44,6 +49,10 @@ if ( ! class_exists( 'Mihdan_Vk_Community_Messages' ) ) {
 		 */
 		private static $instance;
 
+		/**
+		 * @var array
+		 * @link https://vk.com/dev/widget_community_messages
+		 */
 		private $options = array();
 
 		/**
@@ -75,8 +84,26 @@ if ( ! class_exists( 'Mihdan_Vk_Community_Messages' ) ) {
 		 * Установка основных переменных плагина
 		 */
 		private function setup() {
-			self::$dir_path = apply_filters( 'mihdan_vk_community_messages_dir_path', trailingslashit( plugin_dir_path( __FILE__ ) ) );
-			self::$dir_uri   = apply_filters( 'mihdan_vk_community_messages_dir_uri', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+			$this->dir_path = apply_filters( 'mihdan_vk_community_messages_dir_path', trailingslashit( plugin_dir_path( __FILE__ ) ) );
+			$this->dir_uri   = apply_filters( 'mihdan_vk_community_messages_dir_uri', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+
+			$this->options = array(
+				'onCanNotWrite' => 'function() {}',
+				'welcomeScreen' => false,
+				'expandTimeout' => 0,
+				'expanded' => 0,
+				'widgetPosition' => 'right',
+				'buttonType' => 'blue_circle',
+				'disableButtonTooltip' => false,
+				'tooltipButtonText' => 'Ответим на любые ваши вопросы',
+				'disableNewMessagesSound' => false,
+				'disableExpandChatSound' => false,
+				'disableTitleChange' => false,
+				//'from_dev' => true,
+			);
+
+			// Можно переопределить настройки програмно
+			$this->options   = apply_filters( 'mihdan_vk_community_messages_options', $this->options );
 		}
 
 		/**
@@ -89,6 +116,7 @@ if ( ! class_exists( 'Mihdan_Vk_Community_Messages' ) ) {
 		 */
 		private function hooks() {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+			add_action( 'wp_footer', array( $this, 'insert_placeholder' ) );
 		}
 
 		/**
@@ -97,6 +125,11 @@ if ( ! class_exists( 'Mihdan_Vk_Community_Messages' ) ) {
 		public function enqueue_scripts() {
 			wp_enqueue_script( 'vk-api', '//vk.com/js/api/openapi.js', array(), false, true );
 			wp_localize_script( 'vk-api', $this->slug . '_options', $this->options );
+			wp_add_inline_script( 'vk-api', 'VK.Widgets.CommunityMessages( "vk_community_messages", 127607773, ' . $this->slug . '_options );' );
+		}
+
+		public function insert_placeholder() {
+			echo '<div id="vk_community_messages"></div>';
 		}
 	}
 
