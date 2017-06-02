@@ -5,7 +5,7 @@
  * GitHub Plugin URI: https://github.com/mihdan/mihdan-vk-community-messages
  * Author: Mikhail Kobzarev
  * Author URI: https://www.kobzarev.com/
- * Plugin URI: https://www.kobzarev.com/projects/mihdan-vk-community-messages/
+ * Plugin URI: https://www.kobzarev.com/projects/vk-community-messages/
  * Version: 1.0
  *
  * @package mihdan-vk-community-messages
