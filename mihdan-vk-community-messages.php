@@ -112,11 +112,22 @@ if ( ! class_exists( 'Mihdan_Vk_Community_Messages' ) ) {
 		private function includes() {}
 
 		/**
+		 * Получить слюг плагина.
+		 *
+		 * @return string
+		 */
+		public function get_slug() {
+			return $this->slug;
+		}
+
+		/**
 		 * Хукаем.
 		 */
 		private function hooks() {
 			add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			add_action( 'wp_footer', array( $this, 'insert_placeholder' ) );
+			add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+			add_action( 'admin_init', array( $this, 'register_settings' ) );
 		}
 
 		/**
@@ -128,8 +139,36 @@ if ( ! class_exists( 'Mihdan_Vk_Community_Messages' ) ) {
 			wp_add_inline_script( 'vk-api', 'VK.Widgets.CommunityMessages( "vk_community_messages", 127607773, ' . $this->slug . '_options );' );
 		}
 
+		/**
+		 * Вставка плейсхолдера в футер
+		 * для подгрузки в него VK API.
+		 */
 		public function insert_placeholder() {
 			echo '<div id="vk_community_messages"></div>';
+		}
+
+		/**
+		 * Добавить настройки плагина
+		 * в меню админки.
+		 */
+		public function admin_menu() {
+			add_options_page(
+				'Настройки',
+				'VK Community Messages',
+				'manage_options',
+				$this->slug,
+				array( $this, 'options_page' )
+			);
+		}
+
+		public function register_settings() {}
+
+		/**
+		 * Подключить шаблоны вывода
+		 * страницы настроек.
+		 */
+		public function options_page() {
+			require_once ( $this->dir_path . 'admin/options.php' );
 		}
 	}
 
