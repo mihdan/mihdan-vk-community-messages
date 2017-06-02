@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Mihdan: VK Community Messages
- * Description: Плагин добавляет на ваш сайт виджет «Сообщения сообщества» из соцсети ВКонтакте на ваш WordPress сайт.
+ * Description: Плагин добавляет на ваш WordPress сайт виджет «Сообщения сообщества» из ВКонтакте.
  * GitHub Plugin URI: https://github.com/mihdan/mihdan-vk-community-messages
  * Author: Mikhail Kobzarev
  * Author URI: https://www.kobzarev.com/
